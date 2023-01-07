@@ -1,7 +1,23 @@
 const canvas = document.querySelector('#game')
-canvas.width = window.innerWidth * 0.8
+canvas.width = window.innerWidth * 0.5
 canvas.height = window.innerHeight * 0.8
 const ctx = canvas.getContext('2d')
+
+class Game {
+    constructor(grawity)    {
+        this.grawity = grawity
+        this.moveBackground = 0
+        this.defaultSpeedOfMoveBackground = 2
+        this.bottom = 0
+        this.points = 0
+        this.gameOver = false
+    }
+}
+
+stage = new Game(2)
+
+stage.bottom = canvas.height
+cnt = 0
 
 class Box {
     constructor(x, y, width, height) {
@@ -9,13 +25,17 @@ class Box {
         this.y = y
         this.width = width
         this.height = height
+        this.id = cnt
+        cnt += 1
     }
 }
 
 var boxes = []
-
+var used = []
+cnt = 0
 boxes.push(new Box(20, 200, 60, 20))
 boxes.push(new Box(200, 400, 60, 20))
+
 
 const player = {
     x: 200,
@@ -33,12 +53,13 @@ const player = {
     rightStrength: 20,
     rightStrengthDefault: 20,
     speedDropping: 4,
+    started: false,
+    limitOfJumps: 5,
+    jumps: 5,
 }
-
 player.y -= player.height
 player.x = canvas.width / 2 - player.width / 2
 
-grawity = 2
 
 function drawPlayer() {
     ctx.fillStyle = "blue"
@@ -84,6 +105,19 @@ function checkTopColidateWithBox()  {
         }
         if (x_error && y_error) {
             player.y = element.y - player.height
+
+            player.jumps = player.limitOfJumps
+
+            if (!used.includes(element.id)) {
+
+                tmp = stage.moveBackground
+                stage.moveBackground = canvas.height
+                stage.moveBackground -= element.y
+                stage.moveBackground -= element.height
+                stage.points += stage.moveBackground - tmp
+                // stage.bottom = element.y + element.height
+                used.push(element.id)
+            }
             return true
         }
     }
@@ -94,10 +128,10 @@ function updatePlayer() {
     // console.log(grawity)
     if (player.y + player.height < canvas.height && !player.jumping && !checkTopColidateWithBox())   {
 
-        player.y = Math.min(player.y += 1.2 * grawity, canvas.height - player.height)
-        grawity += 0.2
+        player.y = Math.min(player.y += 1.2 * stage.grawity, canvas.height - player.height)
+        stage.grawity += 0.2
     } else {
-        grawity = 1
+        stage.grawity = 1
     }
 
     if (player.jumping) {
@@ -145,10 +179,35 @@ function updatePlayer() {
     }
 }
 
+function updateStage()  {
+    if (stage.moveBackground > 0) {
+
+        tmp = stage.defaultSpeedOfMoveBackground
+        if (stage.moveBackground < stage.defaultSpeedOfMoveBackground)  {
+            tmp = stage.moveBackground
+        }
+
+        console.log(tmp)
+
+        player.y += tmp
+        console.log(boxes)
+        for(let i = 0; i < boxes.length; i++) {
+            boxes[i].y += tmp
+        }
+        console.log(boxes)
+
+        stage.moveBackground -= stage.defaultSpeedOfMoveBackground
+    }
+}
+
 function handleKeyDown(event)    {
     if (event.code == 'Space' || event.code == 'ArrowUp')  {
-        player.jumping = true
-        player.jumpStrength = player.jumpStrengthDefault
+        if (player.jumps > 0)   {
+            player.jumping = true
+            player.jumpStrength = player.jumpStrengthDefault
+            player.started = true
+            player.jumps -= 1
+        }
     }
 
     if (event.code == 'ArrowLeft')  {
@@ -162,11 +221,23 @@ function handleKeyDown(event)    {
     }
 }
 
+function checkGameStatus()  {
+    if (player.y + player.height >= canvas.height && player.started)
+    {
+        stage.gameOver = true
+        console.log("GAME OVER")
+    }
+    
+    document.getElementById("points").innerHTML = stage.points
+}
+
 function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
+    updateStage()
     updatePlayer()
     drawPlayer()
     drawBox()
+    checkGameStatus()
     setTimeout(gameLoop, 1000 / 60)
 }
 
