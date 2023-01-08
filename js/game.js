@@ -1,7 +1,10 @@
 const canvas = document.querySelector('#game')
-canvas.width = window.innerWidth * 0.5
-canvas.height = window.innerHeight * 0.8
+canvas.width = window.innerWidth * 0.3
+canvas.height = window.innerHeight * 0.9
 const ctx = canvas.getContext('2d')
+
+var image = new Image();
+image.src = 'fry_right.svg';
 
 class Game {
     constructor(grawity)    {
@@ -33,15 +36,15 @@ class Box {
 var boxes = []
 var used = []
 cnt = 0
-boxes.push(new Box(20, 200, 60, 20))
-boxes.push(new Box(200, 400, 60, 20))
+boxes.push(new Box(20, 200, 80, 15))
+boxes.push(new Box(200, 400, 80, 15))
 
 
 const player = {
     x: 200,
     y: canvas.height,
-    width: 20,
-    height: 50,
+    width: 25,
+    height: 158,
     speed: 10,
     jumping: false,
     jumpStrength: 25,
@@ -54,20 +57,20 @@ const player = {
     rightStrengthDefault: 20,
     speedDropping: 4,
     started: false,
-    limitOfJumps: 5,
-    jumps: 5,
+    limitOfJumps: 15,
+    jumps: 15,
 }
+
 player.y -= player.height
 player.x = canvas.width / 2 - player.width / 2
 
 
 function drawPlayer() {
-    ctx.fillStyle = "blue"
-    ctx.fillRect(player.x, player.y, player.width, player.height)
+    ctx.drawImage(image, player.x, player.y);
 }
 
 function drawBox()  {
-    ctx.fillStyle = "red"
+    ctx.fillStyle = "black"
     for (const element of boxes)    {
         ctx.fillRect(element.x, element.y, element.width, element.height)
     }
@@ -213,11 +216,13 @@ function handleKeyDown(event)    {
     if (event.code == 'ArrowLeft')  {
         player.lefting = true
         player.leftStrength = player.leftStrengthDefault
+        image.src = 'fry_left.svg';
     }
 
     if (event.code == 'ArrowRight')  {
         player.righting = true
         player.rightStrength = player.rightStrengthDefault
+        image.src = 'fry_right.svg';
     }
 }
 

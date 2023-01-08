@@ -1,4 +1,31 @@
-#game {
+body    {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+}
+
+*   {
+    font-family: 'Amatic SC', cursive;
+}
+
+#logo   {
+    position: fixed;
+    height: 50px;
+    left: calc(50% - 25px);
+    top: 35px;
+}
+
+#game   {
     background-color: #ffffff;
-    border: 1px solid #000000;
+    border: 8px solid #000000;
+    width: 450px;
+    margin-left: calc(50% - 200px);
+    margin-top: 60px;
+    box-sizing: border-box;
+}
+
+.score {
+    font-size: 30px;
+    margin-left: calc(50% - 200px);
+    margin-top: 0;
 }
