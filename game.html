@@ -10,10 +10,22 @@
     <style> @import url('https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap'); </style>
 </head>
 <body>
-    <div class="box">
+    <div class="box" id="box">
         <img id="logo" src="logo.svg" alt="">
         <canvas id="game"></canvas>
-        <p class="score" id="status">Score: <span id="points">10</span></p>
+        <div class="score" id="status" style="display: flex; justify-content: space-between;">
+            <div>Score: <span id="points">10</span></div> 
+            <div>JUMPS: <span id="jumps">10</span></div>
+            <div>SPEED: x<span id="speed">10</span></div>
+        </div>
+    </div>
+
+
+    <div class="gameOver" id="gameOver">
+        <p class="title">GAME OVER</p>
+        <p class="details">Score: <span id="goScore">10</span></p>
+        <p class="details">Floor: <span id="goFloor">10</span></p>
+        <button onclick="window.location.reload();">Play again</button>
     </div>
 
     <p class="mobile">Mobile version coming soon...</p>

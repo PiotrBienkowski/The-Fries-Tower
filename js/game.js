@@ -10,7 +10,7 @@ class Game {
     constructor(grawity)    {
         this.grawity = grawity
         this.moveBackground = 0
-        this.defaultSpeedOfMoveBackground = 2
+        this.defaultSpeedOfMoveBackground = 1
         this.bottom = 0
         this.points = 0
         this.gameOver = false
@@ -58,6 +58,7 @@ const player = {
     started: false,
     limitOfJumps: 3,
     jumps: 3,
+    floor: 0,
 }
 
 player.y -= player.height
@@ -112,6 +113,7 @@ function checkTopColidateWithBox()  {
 
             if (!used.includes(element.id)) {
                 generateBox()
+                player.floor += 1
                 tmp = stage.moveBackground
                 stage.moveBackground = canvas.height
                 stage.moveBackground -= element.y
@@ -243,7 +245,10 @@ function generateBox()  {
             newX = lastX - (Math.floor(Math.random() * 100) + 50)
         }
     }
-    while (newX > canvas.width)   {
+
+    tmpWidth = 80 * (Math.random() * (1.2 - 0.9) + 0.9)
+
+    while (newX + tmpWidth > canvas.width)   {
         tmp = Math.floor(Math.random() * 10)
 
         if (tmp % 2 == 0)   {
@@ -253,18 +258,36 @@ function generateBox()  {
         }
     }
 
-    boxes.push(new Box(newX, last.y - 210 * (Math.random() * (1.2 - 0.9) + 0.9), 80 * (Math.random() * (1.2 - 0.9) + 0.9), 8))
+    boxes.push(new Box(newX, last.y - 210 * (Math.random() * (1.2 - 0.9) + 0.9), tmpWidth, 8))
 }
 
 function checkGameStatus()  {
+
+    if (stage.points > 1000)    {
+        stage.defaultSpeedOfMoveBackground = 2
+    }
+    if (stage.points > 6000)    {
+        stage.defaultSpeedOfMoveBackground = 3
+    }
+    if (stage.points > 11000)   {
+        stage.defaultSpeedOfMoveBackground = 4
+    }
+
     if (player.y + player.height >= canvas.height && player.started)
     {
         stage.gameOver = true
         document.getElementById("status").innerHTML = "GAME OVER"
+        document.getElementById("goScore").innerHTML = parseInt(stage.points)
+        document.getElementById("goFloor").innerHTML = player.floor
+        document.getElementById("gameOver").style.display = "block"
+        document.getElementById("box").style.filter = "blur(6px)"
+
     }
 
     if (!stage.gameOver)    {
         document.getElementById("points").innerHTML = parseInt(stage.points)
+        document.getElementById("jumps").innerHTML = parseInt(player.jumps)
+        document.getElementById("speed").innerHTML = parseInt(stage.defaultSpeedOfMoveBackground)
     }
 }
 
