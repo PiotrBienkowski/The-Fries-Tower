@@ -48,7 +48,7 @@ body    {
     text-align: center;
     top: 100px;
     left: calc(50% - 200px);
-    box-sizing: border-boxba;
+    box-sizing: border-box;
 }
 
 .gameOver .title    {
