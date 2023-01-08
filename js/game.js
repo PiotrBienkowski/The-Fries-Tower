@@ -64,7 +64,6 @@ const player = {
 player.y -= player.height
 player.x = canvas.width / 2 - player.width / 2
 
-
 function drawPlayer() {
     ctx.drawImage(image, player.x, player.y);
 }
@@ -163,6 +162,8 @@ function updatePlayer() {
         if (player.leftStrength <= 0)   {
             player.lefting = false
         }
+
+        image.src = 'fry_left.svg';
     }
 
     if (player.righting)
@@ -211,7 +212,6 @@ function handleKeyDown(event)    {
     if (event.code == 'ArrowLeft')  {
         player.lefting = true
         player.leftStrength = player.leftStrengthDefault
-        image.src = 'fry_left.svg';
     }
 
     if (event.code == 'ArrowRight')  {
@@ -222,12 +222,8 @@ function handleKeyDown(event)    {
 }
 
 function generateBox()  {
-    
     last = boxes[boxes.length - 1]
-
     lastX = last.x + last.height / 2
-    
-
     tmp = Math.floor(Math.random() * 10)
 
     if (tmp % 2 == 0)   {
@@ -247,7 +243,6 @@ function generateBox()  {
     }
 
     tmpWidth = 80 * (Math.random() * (1.2 - 0.9) + 0.9)
-
     while (newX + tmpWidth > canvas.width)   {
         tmp = Math.floor(Math.random() * 10)
 
@@ -281,7 +276,6 @@ function checkGameStatus()  {
         document.getElementById("goFloor").innerHTML = player.floor
         document.getElementById("gameOver").style.display = "block"
         document.getElementById("box").style.filter = "blur(6px)"
-
     }
 
     if (!stage.gameOver)    {
@@ -303,8 +297,14 @@ function gameLoop() {
     if (!stage.gameOver)    {
         setTimeout(gameLoop, 1000 / 60)
     }
+    if (stage.gameOver) {
+        document.addEventListener('keydown', function(event) {
+            if (event.code == 'Space' || event.code == 'Enter') {
+                window.location.reload();
+            }
+        });  
+    }
 }
 
 document.addEventListener('keydown', handleKeyDown) 
-
 gameLoop()
