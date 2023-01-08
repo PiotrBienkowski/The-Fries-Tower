@@ -28,4 +28,23 @@ body    {
     font-size: 30px;
     margin-left: calc(50% - 200px);
     margin-top: 0;
+    margin-bottom: 0;
+}
+
+.mobile {
+    text-align: center;
+    font-size: 50px;
+    margin: 40px;
+    display: none;
+}
+
+@media only screen and (max-width: 700px) 
+{
+    .box    {
+        display: none;
+    }
+    
+    .mobile {
+        display: block;
+    }
 }

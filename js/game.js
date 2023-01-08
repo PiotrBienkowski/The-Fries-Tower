@@ -1,6 +1,6 @@
 const canvas = document.querySelector('#game')
-canvas.width = window.innerWidth * 0.3
-canvas.height = window.innerHeight * 0.9
+canvas.width = 1680 * 0.3
+canvas.height = 914 * 0.9
 const ctx = canvas.getContext('2d')
 
 var image = new Image();
@@ -36,9 +36,8 @@ class Box {
 var boxes = []
 var used = []
 cnt = 0
-boxes.push(new Box(20, 200, 80, 15))
-boxes.push(new Box(200, 400, 80, 15))
-
+boxes.push(new Box(120, 600, 80, 8))
+generateBox()
 
 const player = {
     x: 200,
@@ -47,18 +46,18 @@ const player = {
     height: 158,
     speed: 10,
     jumping: false,
-    jumpStrength: 25,
-    jumpStrengthDefault: 25,
+    jumpStrength: 30,
+    jumpStrengthDefault: 30,
     lefting: false,
-    leftStrength: 20,
-    leftStrengthDefault: 20,
+    leftStrength: 17,
+    leftStrengthDefault: 17,
     righting: false,
-    rightStrength: 20,
-    rightStrengthDefault: 20,
+    rightStrength: 17,
+    rightStrengthDefault: 17,
     speedDropping: 4,
     started: false,
-    limitOfJumps: 15,
-    jumps: 15,
+    limitOfJumps: 3,
+    jumps: 3,
 }
 
 player.y -= player.height
@@ -112,13 +111,12 @@ function checkTopColidateWithBox()  {
             player.jumps = player.limitOfJumps
 
             if (!used.includes(element.id)) {
-
+                generateBox()
                 tmp = stage.moveBackground
                 stage.moveBackground = canvas.height
                 stage.moveBackground -= element.y
                 stage.moveBackground -= element.height
                 stage.points += stage.moveBackground - tmp
-                // stage.bottom = element.y + element.height
                 used.push(element.id)
             }
             return true
@@ -128,7 +126,6 @@ function checkTopColidateWithBox()  {
 }
 
 function updatePlayer() {
-    // console.log(grawity)
     if (player.y + player.height < canvas.height && !player.jumping && !checkTopColidateWithBox())   {
 
         player.y = Math.min(player.y += 1.2 * stage.grawity, canvas.height - player.height)
@@ -190,14 +187,10 @@ function updateStage()  {
             tmp = stage.moveBackground
         }
 
-        console.log(tmp)
-
         player.y += tmp
-        console.log(boxes)
         for(let i = 0; i < boxes.length; i++) {
             boxes[i].y += tmp
         }
-        console.log(boxes)
 
         stage.moveBackground -= stage.defaultSpeedOfMoveBackground
     }
@@ -226,15 +219,56 @@ function handleKeyDown(event)    {
     }
 }
 
+function generateBox()  {
+    
+    last = boxes[boxes.length - 1]
+
+    lastX = last.x + last.height / 2
+    
+
+    tmp = Math.floor(Math.random() * 10)
+
+    if (tmp % 2 == 0)   {
+        newX = lastX + (Math.floor(Math.random() * 100) + 50)
+    } else  {
+        newX = lastX - (Math.floor(Math.random() * 100) + 50)
+    }
+
+    while (newX < 0)   {
+        tmp = Math.floor(Math.random() * 10)
+
+        if (tmp % 2 == 0)   {
+            newX = lastX + (Math.floor(Math.random() * 100) + 50)
+        } else  {
+            newX = lastX - (Math.floor(Math.random() * 100) + 50)
+        }
+    }
+    while (newX > canvas.width)   {
+        tmp = Math.floor(Math.random() * 10)
+
+        if (tmp % 2 == 0)   {
+            newX = lastX + (Math.floor(Math.random() * 100) + 50)
+        } else  {
+            newX = lastX - (Math.floor(Math.random() * 100) + 50)
+        }
+    }
+
+    boxes.push(new Box(newX, last.y - 210 * (Math.random() * (1.2 - 0.9) + 0.9), 80 * (Math.random() * (1.2 - 0.9) + 0.9), 8))
+}
+
 function checkGameStatus()  {
     if (player.y + player.height >= canvas.height && player.started)
     {
         stage.gameOver = true
-        console.log("GAME OVER")
+        document.getElementById("status").innerHTML = "GAME OVER"
     }
-    
-    document.getElementById("points").innerHTML = stage.points
+
+    if (!stage.gameOver)    {
+        document.getElementById("points").innerHTML = parseInt(stage.points)
+    }
 }
+
+generateBox()
 
 function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -243,7 +277,9 @@ function gameLoop() {
     drawPlayer()
     drawBox()
     checkGameStatus()
-    setTimeout(gameLoop, 1000 / 60)
+    if (!stage.gameOver)    {
+        setTimeout(gameLoop, 1000 / 60)
+    }
 }
 
 document.addEventListener('keydown', handleKeyDown) 
