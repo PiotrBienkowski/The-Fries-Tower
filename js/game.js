@@ -4,7 +4,7 @@ canvas.height = 914 * 0.9
 const ctx = canvas.getContext('2d')
 
 var image = new Image();
-image.src = 'fry_right.svg';
+image.src = 'images/fry_right.svg';
 
 class Game {
     constructor(grawity)    {
@@ -163,7 +163,7 @@ function updatePlayer() {
             player.lefting = false
         }
 
-        image.src = 'fry_left.svg';
+        image.src = 'images/fry_left.svg';
     }
 
     if (player.righting)
@@ -217,7 +217,7 @@ function handleKeyDown(event)    {
     if (event.code == 'ArrowRight')  {
         player.righting = true
         player.rightStrength = player.rightStrengthDefault
-        image.src = 'fry_right.svg';
+        image.src = 'images/fry_right.svg';
     }
 }
 
