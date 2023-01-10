@@ -1,6 +1,6 @@
 # The-Fries-Tower
 A simple game inspired by Icy Tower
-The game is available online at: http://pogoda.tianacapital.com/fries/game.html 
+The game is available online at http://pogoda.tianacapital.com/fries/game.html 
 
 Preview: <br />
 ![image 104](https://user-images.githubusercontent.com/120416913/211203328-62b5356a-8b7c-47c9-85c0-98edae2f945d.png) <br />
