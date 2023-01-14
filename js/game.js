@@ -179,6 +179,8 @@ function updatePlayer() {
         if (player.rightStrength <= 0)   {
             player.righting = false
         }
+
+        image.src = 'images/fry_right.svg';
     }
 }
 
@@ -199,26 +201,29 @@ function updateStage()  {
     }
 }
 
+function moveUp()   {
+    if (player.jumps > 0)   {
+        player.jumping = true
+        player.jumpStrength = player.jumpStrengthDefault
+        player.started = true
+        player.jumps -= 1
+    }
+}
+
+function moveLeft() {
+    player.lefting = true
+    player.leftStrength = player.leftStrengthDefault
+}
+
+function moveRight()    {
+    player.righting = true
+    player.rightStrength = player.rightStrengthDefault
+}
+
 function handleKeyDown(event)    {
-    if (event.code == 'Space' || event.code == 'ArrowUp')  {
-        if (player.jumps > 0)   {
-            player.jumping = true
-            player.jumpStrength = player.jumpStrengthDefault
-            player.started = true
-            player.jumps -= 1
-        }
-    }
-
-    if (event.code == 'ArrowLeft')  {
-        player.lefting = true
-        player.leftStrength = player.leftStrengthDefault
-    }
-
-    if (event.code == 'ArrowRight')  {
-        player.righting = true
-        player.rightStrength = player.rightStrengthDefault
-        image.src = 'images/fry_right.svg';
-    }
+    if (event.code == 'Space' || event.code == 'ArrowUp')  moveUp()
+    if (event.code == 'ArrowLeft')  moveLeft()
+    if (event.code == 'ArrowRight')  moveRight()
 }
 
 function generateBox()  {
@@ -307,4 +312,8 @@ function gameLoop() {
 }
 
 document.addEventListener('keydown', handleKeyDown) 
+document.getElementById("topButton").addEventListener("click", moveUp)
+document.getElementById("leftButton").addEventListener("click", moveLeft)
+document.getElementById("rightButton").addEventListener("click", moveRight)
+
 gameLoop()
