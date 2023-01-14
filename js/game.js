@@ -281,6 +281,7 @@ function checkGameStatus()  {
         document.getElementById("goFloor").innerHTML = player.floor
         document.getElementById("gameOver").style.display = "block"
         document.getElementById("box").style.filter = "blur(6px)"
+        document.getElementById("pad").style.filter = "blur(6px)"
     }
 
     if (!stage.gameOver)    {
